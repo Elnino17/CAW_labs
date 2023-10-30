@@ -1,88 +1,73 @@
-// Add this code to your maze.js file
 document.addEventListener("DOMContentLoaded", function() {
-    // Get all elements with class "boundary"
     const boundaries = document.querySelectorAll(".boundary");
-
-    // Loop through the boundary elements and add a mouseover event listener
-    boundaries.forEach(function(boundary) {
-        boundary.addEventListener("mouseover", function() {
-            // Turn the boundary red
-            boundary.classList.add("youlose");
-        });
-    });
-});
-
-// Modify the code from Exercise 1
-document.addEventListener("DOMContentLoaded", function() {
-    // Get all elements with class "boundary"
-    const boundaries = document.querySelectorAll(".boundary");
-
-    // Function to turn all boundaries red
-    function turnAllBoundariesRed() {
-        boundaries.forEach(function(boundary) {
-            boundary.classList.add("youlose");
-        });
-    }
-
-    // Add a mouseover event listener to any boundary
-    boundaries.forEach(function(boundary) {
-        boundary.addEventListener("mouseover", turnAllBoundariesRed);
-    });
-});
-
-// Modify the code from Exercise 1
-document.addEventListener("DOMContentLoaded", function() {
-    // Get all elements with class "boundary"
-    const boundaries = document.querySelectorAll(".boundary");
-
-    // Function to turn all boundaries red
-    function turnAllBoundariesRed() {
-        boundaries.forEach(function(boundary) {
-            boundary.classList.add("youlose");
-        });
-    }
-
-    // Add a mouseover event listener to any boundary
-    boundaries.forEach(function(boundary) {
-        boundary.addEventListener("mouseover", turnAllBoundariesRed);
-    });
-});
-
-// Add this code to your maze.js file
-document.addEventListener("DOMContentLoaded", function() {
-    // Get the "end" element
     const end = document.getElementById("end");
-
-    // Function to show a "You win!" alert
-    function displayWinAlert() {
-        alert("You win!");
-    }
-
-    // Add a mouseover event listener to the "end" element
-    end.addEventListener("mouseover", displayWinAlert);
-});
-document.addEventListener("DOMContentLoaded", function() {
     const start = document.getElementById("start");
-    const boundaries = document.querySelectorAll(".boundary");
-    const exampleBoundary = document.querySelector(".boundary.example"); // Get the example boundary element
-  
-    function resetMaze() {
-      boundaries.forEach(function(boundary) {
-        boundary.classList.remove("youlose");
-      });
+    const exampleBoundary = document.querySelector(".boundary.example");
+    const status = document.getElementById("status");
+    let gameStarted = false;
+    let inMaze = true;
+
+    function turnAllBoundariesRed() {
+        if (gameStarted && inMaze) {
+            boundaries.forEach(function(boundary) {
+                boundary.style.backgroundColor = "#ff8888"; // Red color
+            });
+            status.textContent = "You lose! Press 'R' to play again.";
+        }
     }
-  
-    // Add a click event listener to the example boundary for resetting the maze
+
+    function displayWinMessage() {
+        if (gameStarted) {
+            status.textContent = "You win! Press 'R' to play again.";
+            boundaries.forEach(function(boundary) {
+                boundary.style.backgroundColor = "#88ff88"; // Green color
+            });
+        }
+    }
+
+    function resetMaze() {
+        boundaries.forEach(function(boundary) {
+            boundary.classList.remove("youlose");
+            boundary.style.backgroundColor = "#eeeeee";
+        });
+        status.textContent = "Move your mouse over the 'S' to begin.";
+        gameStarted = false;
+        inMaze = true;
+    }
+
+    function checkWin() {
+        if (gameStarted) {
+            const isAnyBoundaryRed = Array.from(boundaries).some(boundary => boundary.classList.contains("youlose"));
+            if (!isAnyBoundaryRed) {
+                displayWinMessage();
+            } else {
+                status.textContent = "You lose!";
+            }
+        }
+    }
+
     exampleBoundary.addEventListener("click", resetMaze);
-  
-    // Add a click event listener to the "start" element for resetting the maze as well
-    start.addEventListener("click", resetMaze);
-  
-    // Add a keyboard event listener for the "r" key
-    document.addEventListener("keydown", function(event) {
-      if (event.key === "r") {
+    start.addEventListener("click", function() {
         resetMaze();
-      }
+        gameStarted = true;
     });
-  });
-  
+    end.addEventListener("mouseover", checkWin);
+
+    boundaries.forEach(function(boundary) {
+        boundary.addEventListener("mouseover", turnAllBoundariesRed);
+    });
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "r") {
+            resetMaze();
+        }
+    });
+
+    const maze = document.getElementById("maze");
+    maze.addEventListener("mouseleave", function() {
+        if (gameStarted) {
+            inMaze = false;
+            turnAllBoundariesRed();
+        }
+    });
+});
