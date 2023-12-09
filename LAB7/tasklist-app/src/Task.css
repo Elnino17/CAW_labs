@@ -1,0 +1,63 @@
+.task {
+  position: relative;
+  background-color: #ecf0f1;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-content {
+  display: flex;
+  flex-direction: column; /* Adjusted to display subtasks vertically */
+}
+
+.subtask {
+  display: flex;
+  justify-content: space-between; /* Aligns subtask text and DONE button to the right */
+  align-items: center; /* Aligns items vertically in the center */
+  margin-bottom: 10px; /* Adjust as needed for spacing */
+}
+
+button {
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #c0392b;
+}
+
+.delete {
+  position: absolute;
+  top: 3px;
+  right: 6px;
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 100px;
+}
+
+.add {
+  border-radius: 20px;
+}
+
+/* Move the done button to the right within each subtask */
+.done {
+  margin-left: auto;
+  border-radius: 20px;
+  background-color: #2ecc71;
+}
+
+/* Add line-through style to completed subtasks */
+.subtask.completed .subtask-text {
+  text-decoration: line-through;
+}
